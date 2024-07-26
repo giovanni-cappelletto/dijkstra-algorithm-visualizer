@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dijkstra's Algorithm Visualizer | Giovanni Cappelletto</title>
+    <link rel="icon" href="assets/favicon.gif" type="image/gif" >
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" integrity="sha384-nB0miv6/jRmo5UMMR1wu3Gz6NLsoTkbqJghGIsx//Rlm+ZU03BU6SQNC66uf4l5+" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" integrity="sha384-7zkQWkzuo3B5mTepMUcHkMB5jZaolc2xDwL6VFqjFALcbeS9Ggm/Yr2r3Dy4lfFg" crossorigin="anonymous" defer></script>
@@ -49,151 +50,163 @@
         </div>
         <div class="chapter">
             <h3 class="chapter_title" id="how-to-use">How to use the program</h3>
-
+            <p>Currently, you can use Dijkstra's Algorithm Visualizer in two modes: the Classic mode and the Euclidean one.</p>
+            <p>By choosing Classic mode, you need to specify graph's nodes and edges in this format: <span class="format">&#60;firstNodeName&#62;&#60;secondNodeName&#62;: &#60;edgeLength&#62;</span></p>
+            <p>For example, a valid input could be: AB: 5, CD: 7, AC: 2, BC: 4, BD: 9</p>
+            <p>By choosing Euclidean mode, you create nodes as they were points in a cartesian coordinate system. Then, the program will calculate automatically the distances between those points, which are the edges.</p>
+            <p>In order to create points in Euclidean mode, fill the "Nodes Coordinates" input with a string in this format: <span class="format">&#60;firstNodeName&#62;(&#60;xCoordinate&#62;, &#60;yCoordinate&#62;)</span></p>
+            <p>For example, a valid input could be: A(-1, 2) B(4, 1) C(-2, 6) D(3, 1) F(4, 5)</p>
+            <p>Without specifying edges, the program will assume that all nodes are linked together.</p>
+            <p>If you want only particular edges, please fill the "Edges" input like so: <span class="format">&#60;firstNodeName&#62;-&#60;secondNodeName&#62;</span></p>
+            <p>For example: A-B, B-C, C-D</p>
+            
+            <a href="/playground/playground.html">
+                <button class="cta">Let's use it!</button>
+            </a>
         </div>
     </main>
-    <aside>
-        <img src="../assets/graph.png" alt="Example of graph">
+    <aside class="main-aside">
+        <img src="../assets/graph.png" class="main-img" alt="Example of graph">
     </aside>
 
-    <!-- <button class="cta">View</button> -->
-
     <section>
-        <header>
-            <p class="path"><span class="return-to-home" tabindex="0">Home</span> > <span class="current-position">Visual Explanation</span></p>
-            <h1>Visual explanation of Dijkstra's algorithm</h1>
-        </header>
-        <div class="section-container">
-            <div class="content" data-visible="true">
-                <p>Let's make a visual example in order to understand better how the algorithm works.</p>
-                <p>Here we start from the node <span id="node-A"></span> and we need to find the minimum spanning tree of the given graph.</p>
-            </div>
-            
-            <div class="content">
-                <p>Let's make a table with the distances from <span id="node-A"></span> to each node of the graph. Note that if <span id="node-A"></span> is not connected to a particular node, its distance will be <span id="infty"></span>.</p>
-                <table id="distance-from-A">
-                    <tr>
-                        <th>C</th>
-                        <th>B</th>
-                        <th>D</th>
-                        <th>E</th>
-                        <th>F</th>
-                        <th>G</th>
-                    </tr>
-                    <tr>
-                        <td>4</td>
-                        <td>5</td>
-                        <td><span id="infty"></span></td>
-                        <td><span id="infty"></span></td>
-                        <td><span id="infty"></span></td>
-                        <td><span id="infty"></span></td>
-                    </tr>
-                </table> 
-                <label for="distance-from-A">Distances from <span id="node-A"></span></label>
-            </div>
-
-            <div class="content">
-                <p>Since now the minimum distance is the one between <span id="node-A"></span> and <span id="node-C"></span>, we study every possible path from <span id="node-C"></span> to other nodes. So, we make another table as before. Note that the distance from <span id="node-C"></span> and its adjacent nodes is given by summing up 4 (the weight between <span id="node-A"></span> and <span id="node-C"></span>) with the weight between <span id="node-C"></span> and its adjacent nodes.</p>
-                <p>It's important to know that if we can arrive to the same node from different starting nodes, we take the path with the minimum distance.</p>
-                <p>Now the table is:</p>
-                <table id="distance-from-C">
-                    <tr>
-                        <th>B</th>
-                        <th>F</th>
-                        <th>D</th>
-                        <th>E</th>
-                        <th>G</th>
-                    </tr>
-                    <tr>
-                        <td>5</td>
-                        <td>5</td>
-                        <td><span id="infty"></span></td>
-                        <td><span id="infty"></span></td>
-                        <td><span id="infty"></span></td>
-                    </tr>
-                </table> 
-                <label for="distance-from-C">Distances from <span id="node-C"></span></label>
-            </div>
-
-
-            <div class="content">
-                <p>Now, either <span id="node-B"></span> or <span id="node-F"></span> has the same weight. For this reason, we can decide whether to continue studying the graph from <span id="node-F"></span> and then passing to <span id="node-B"></span> or viceversa. Let's study <span id="node-B"></span> first!</p>
-                <p>Now the table looks like this:</p>
-                <table id="distance-from-B">
-                    <tr>
-                        <th>F</th>
-                        <th>D</th>
-                        <th>E</th>
-                        <th>G</th>
-                    </tr>
-                    <tr>
-                        <td>5</td>
-                        <td>7</td>
-                        <td>8</td>
-                        <td><span id="infty"></span></td>
-                    </tr>
-                </table> 
-                <label for="distance-from-B">Distances from <span id="node-B"></span></label>
-            </div>
-
-            <div class="content">
-                <p>Now, let's repeat the same process for <span id="node-F"></span>, <span id="node-D"></span>, <span id="node-E"></span> and <span id="node-G"></span>.</p>
-                <p>Since the path from <span id="node-F"></span> to <span id="node-D"></span> weights 8, while the one from <span id="node-B"></span> to <span id="node-D"></span> weights 7, we keep the last one:</p>
-                <table id="distance-from-F">
-                    <tr>
-                        <th>D</th>
-                        <th>E</th>
-                        <th>G</th>
-                    </tr>
-                    <tr>
-                        <td>7</td>
-                        <td>8</td>
-                        <td>10</td>
-                    </tr>
-                </table> 
-                <label for="distance-from-F">Distances from <span id="node-F"></span></label>
-            </div>
-
-            <div class="content">
-                <p>We do not need to repeat the process for <span id="node-D"></span>, because we can already see that the distance from <span id="node-D"></span> to <span id="node-F"></span> is 10, while the current path in order to reach weights only 5.</p>
-                <p>Reaching <span id="node-G"></span> from <span id="node-E"></span> costs 12, while the path from <span id="node-F"></span> to <span id="node-G"></span> is only 10. In other words, the previous image represents the minimum spanning tree of the given graph. By using all the tables or this last image, we are able to calculate the minimum cost to reach each node.</p>
-            </div>
-
-            <div class="steps">
-                <div class="step" data-active="true">
-                    <svg width="52" height="52" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="26" cy="26" r="24.5" stroke="#011227" stroke-width="3"/>
-                        <circle cx="0" cy="0" r="24.5" fill="#011227" class="svg-bg"/>
-                        <path d="M27.0687 22.2727V31H25.2235V24.0241H25.1724L23.1738 25.277V23.6406L25.3343 22.2727H27.0687Z" fill="#011227"/>
-                    </svg>
+        <div class="section-wrapper">
+            <div class="section-container">
+                <header>
+                    <p class="path"><span class="return-to-home" tabindex="0">Home</span> > <span class="current-position">Visual Explanation</span></p>
+                    <h1>Visual explanation of Dijkstra's algorithm</h1>
+                </header>
+                <div class="content" data-visible="true">
+                    <p>Let's make a visual example in order to understand better how the algorithm works.</p>
+                    <p>Here we start from the node <span id="node-A"></span> and we need to find the minimum spanning tree of the given graph.</p>
                 </div>
-                <div class="step">
-                    <svg width="52" height="52" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="26" cy="26" r="24.5" stroke="#011227" stroke-width="3"/>
-                        <circle cx="0" cy="0" r="24.5" fill="#011227" class="svg-bg"/>
-                        <path d="M22.9281 31V29.6705L26.0346 26.794C26.2988 26.5384 26.5204 26.3082 26.6994 26.1037C26.8812 25.8991 27.019 25.6989 27.1127 25.5028C27.2065 25.304 27.2534 25.0895 27.2534 24.8594C27.2534 24.6037 27.1951 24.3835 27.0787 24.1989C26.9622 24.0114 26.8031 23.8679 26.6014 23.7685C26.3997 23.6662 26.171 23.6151 25.9153 23.6151C25.6483 23.6151 25.4153 23.669 25.2164 23.777C25.0176 23.8849 24.8642 24.0398 24.7562 24.2415C24.6483 24.4432 24.5943 24.6832 24.5943 24.9616H22.8429C22.8429 24.3906 22.9721 23.8949 23.2306 23.4744C23.4892 23.054 23.8514 22.7287 24.3173 22.4986C24.7832 22.2685 25.3201 22.1534 25.9281 22.1534C26.5531 22.1534 27.0971 22.2642 27.5602 22.4858C28.0261 22.7045 28.3883 23.0085 28.6468 23.3977C28.9054 23.7869 29.0346 24.233 29.0346 24.7358C29.0346 25.0653 28.9693 25.3906 28.8386 25.7116C28.7108 26.0327 28.4821 26.3892 28.1525 26.7812C27.823 27.1705 27.3585 27.6378 26.7591 28.1832L25.4849 29.4318V29.4915H29.1497V31H22.9281Z" fill="#011227"/>
-                    </svg>
+                
+                <div class="content">
+                    <p>Let's make a table with the distances from <span id="node-A"></span> to each node of the graph. Note that if <span id="node-A"></span> is not connected to a particular node, its distance will be <span id="infty"></span>.</p>
+                    <table id="distance-from-A">
+                        <tr>
+                            <th>C</th>
+                            <th>B</th>
+                            <th>D</th>
+                            <th>E</th>
+                            <th>F</th>
+                            <th>G</th>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>5</td>
+                            <td><span id="infty"></span></td>
+                            <td><span id="infty"></span></td>
+                            <td><span id="infty"></span></td>
+                            <td><span id="infty"></span></td>
+                        </tr>
+                    </table> 
+                    <label for="distance-from-A">Distances from <span id="node-A"></span></label>
                 </div>
-                <div class="step">
-                    <svg width="52" height="52" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="26" cy="26" r="24.5" stroke="#011227" stroke-width="3"/>
-                        <circle cx="0" cy="0" r="24.5" fill="#011227" class="svg-bg"/>
-                        <path d="M25.4782 31.1193C24.8418 31.1193 24.275 31.0099 23.7779 30.7912C23.2836 30.5696 22.8929 30.2656 22.606 29.8793C22.3219 29.4901 22.1756 29.0412 22.1671 28.5327H24.025C24.0364 28.7457 24.106 28.9332 24.2338 29.0952C24.3645 29.2543 24.5378 29.3778 24.7537 29.4659C24.9696 29.554 25.2125 29.598 25.4824 29.598C25.7637 29.598 26.0123 29.5483 26.2282 29.4489C26.4441 29.3494 26.6131 29.2116 26.7353 29.0355C26.8574 28.8594 26.9185 28.6562 26.9185 28.4261C26.9185 28.1932 26.8532 27.9872 26.7225 27.8082C26.5946 27.6264 26.41 27.4844 26.1685 27.3821C25.9299 27.2798 25.6458 27.2287 25.3162 27.2287H24.5023V25.8736H25.3162C25.5946 25.8736 25.8404 25.8253 26.0534 25.7287C26.2694 25.6321 26.437 25.4986 26.5563 25.3281C26.6756 25.1548 26.7353 24.9531 26.7353 24.723C26.7353 24.5043 26.6827 24.3125 26.5776 24.1477C26.4753 23.9801 26.3304 23.8494 26.1429 23.7557C25.9583 23.6619 25.7424 23.6151 25.4952 23.6151C25.2452 23.6151 25.0165 23.6605 24.8091 23.7514C24.6017 23.8395 24.4355 23.9659 24.3105 24.1307C24.1855 24.2955 24.1188 24.4886 24.1103 24.7102H22.3418C22.3503 24.2074 22.4938 23.7642 22.7722 23.3807C23.0506 22.9972 23.4256 22.6974 23.8972 22.4815C24.3716 22.2628 24.9071 22.1534 25.5037 22.1534C26.106 22.1534 26.633 22.2628 27.0847 22.4815C27.5364 22.7003 27.8873 22.9957 28.1373 23.3679C28.3901 23.7372 28.5151 24.152 28.5123 24.6122C28.5151 25.1009 28.3631 25.5085 28.0563 25.8352C27.7523 26.1619 27.356 26.3693 26.8674 26.4574V26.5256C27.5094 26.608 27.998 26.831 28.3333 27.1946C28.6713 27.5554 28.839 28.0071 28.8361 28.5497C28.839 29.0469 28.6955 29.4886 28.4057 29.875C28.1188 30.2614 27.7225 30.5653 27.2168 30.7869C26.7111 31.0085 26.1316 31.1193 25.4782 31.1193Z" fill="#011227"/>
-                    </svg>
+    
+                <div class="content">
+                    <p>Since now the minimum distance is the one between <span id="node-A"></span> and <span id="node-C"></span>, we study every possible path from <span id="node-C"></span> to other nodes. So, we make another table as before. Note that the distance from <span id="node-C"></span> and its adjacent nodes is given by summing up 4 (the weight between <span id="node-A"></span> and <span id="node-C"></span>) with the weight between <span id="node-C"></span> and its adjacent nodes.</p>
+                    <p>It's important to know that if we can arrive to the same node from different starting nodes, we take the path with the minimum distance.</p>
+                    <p>Now the table is:</p>
+                    <table id="distance-from-C">
+                        <tr>
+                            <th>B</th>
+                            <th>F</th>
+                            <th>D</th>
+                            <th>E</th>
+                            <th>G</th>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td>5</td>
+                            <td><span id="infty"></span></td>
+                            <td><span id="infty"></span></td>
+                            <td><span id="infty"></span></td>
+                        </tr>
+                    </table> 
+                    <label for="distance-from-C">Distances from <span id="node-C"></span></label>
                 </div>
-                <div class="step">
-                    <svg width="52" height="52" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="26" cy="26" r="24.5" stroke="#011227" stroke-width="3"/>
-                        <circle cx="0" cy="0" r="24.5" fill="#011227" class="svg-bg"/>
-                        <path d="M22.0089 29.4659V28.0128L25.6523 22.2727H26.9052V24.2841H26.1637L23.8668 27.919V27.9872H29.0444V29.4659H22.0089ZM26.1978 31V29.0227L26.2319 28.3793V22.2727H27.962V31H26.1978Z" fill="#011227"/>
-                    </svg>
+    
+    
+                <div class="content">
+                    <p>Now, either <span id="node-B"></span> or <span id="node-F"></span> has the same weight. For this reason, we can decide whether to continue studying the graph from <span id="node-F"></span> and then passing to <span id="node-B"></span> or viceversa. Let's study <span id="node-B"></span> first!</p>
+                    <p>Now the table looks like this:</p>
+                    <table id="distance-from-B">
+                        <tr>
+                            <th>F</th>
+                            <th>D</th>
+                            <th>E</th>
+                            <th>G</th>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td>7</td>
+                            <td>8</td>
+                            <td><span id="infty"></span></td>
+                        </tr>
+                    </table> 
+                    <label for="distance-from-B">Distances from <span id="node-B"></span></label>
                 </div>
-                <div class="step">
-                    <svg width="52" height="52" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="26" cy="26" r="24.5" stroke="#011227" stroke-width="3"  class="svg-bg"/>
-                        <circle cx="0" cy="0" r="24.5" fill="#011227" class="svg-bg"/>
-                        <path d="M25.5277 31.1193C24.9254 31.1193 24.3885 31.0085 23.9169 30.7869C23.4482 30.5653 23.076 30.2599 22.8004 29.8707C22.5249 29.4815 22.3814 29.0355 22.37 28.5327H24.1598C24.1797 28.8707 24.3217 29.1449 24.5859 29.3551C24.8501 29.5653 25.1641 29.6705 25.5277 29.6705C25.8175 29.6705 26.0732 29.6065 26.2947 29.4787C26.5192 29.348 26.6939 29.1676 26.8189 28.9375C26.9467 28.7045 27.0107 28.4375 27.0107 28.1364C27.0107 27.8295 26.9453 27.5597 26.8146 27.3267C26.6868 27.0937 26.5092 26.9119 26.282 26.7812C26.0547 26.6506 25.7947 26.5838 25.5021 26.581C25.2464 26.581 24.9979 26.6335 24.7564 26.7386C24.5178 26.8437 24.3317 26.9872 24.1982 27.169L22.5575 26.875L22.9709 22.2727H28.3061V23.7812H24.4922L24.2663 25.9673H24.3175C24.4709 25.7514 24.7024 25.5724 25.0121 25.4304C25.3217 25.2884 25.6683 25.2173 26.0518 25.2173C26.5774 25.2173 27.0462 25.3409 27.4581 25.5881C27.87 25.8352 28.1953 26.1747 28.4339 26.6065C28.6726 27.0355 28.7905 27.5298 28.7876 28.0895C28.7905 28.6776 28.6541 29.2003 28.3786 29.6577C28.1058 30.1122 27.7237 30.4702 27.2322 30.7315C26.7436 30.9901 26.1754 31.1193 25.5277 31.1193Z" fill="#011227"/>
-                    </svg>
+    
+                <div class="content">
+                    <p>Now, let's repeat the same process for <span id="node-F"></span>, <span id="node-D"></span>, <span id="node-E"></span> and <span id="node-G"></span>.</p>
+                    <p>Since the path from <span id="node-F"></span> to <span id="node-D"></span> weights 8, while the one from <span id="node-B"></span> to <span id="node-D"></span> weights 7, we keep the last one:</p>
+                    <table id="distance-from-F">
+                        <tr>
+                            <th>D</th>
+                            <th>E</th>
+                            <th>G</th>
+                        </tr>
+                        <tr>
+                            <td>7</td>
+                            <td>8</td>
+                            <td>10</td>
+                        </tr>
+                    </table> 
+                    <label for="distance-from-F">Distances from <span id="node-F"></span></label>
+                </div>
+    
+                <div class="content">
+                    <p>We do not need to repeat the process for <span id="node-D"></span>, because we can already see that the distance from <span id="node-D"></span> to <span id="node-F"></span> is 10, while the current path in order to reach weights only 5.</p>
+                    <p>Reaching <span id="node-G"></span> from <span id="node-E"></span> costs 12, while the path from <span id="node-F"></span> to <span id="node-G"></span> is only 10. In other words, the previous image represents the minimum spanning tree of the given graph. By using all the tables or this last image, we are able to calculate the minimum cost to reach each node.</p>
+                </div>
+    
+                <div class="steps">
+                    <div class="step" data-active="true">
+                        <svg width="52" height="52" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="26" cy="26" r="24.5" stroke="#011227" stroke-width="3"/>
+                            <circle cx="0" cy="0" r="24.5" fill="#011227" class="svg-bg"/>
+                            <path d="M27.0687 22.2727V31H25.2235V24.0241H25.1724L23.1738 25.277V23.6406L25.3343 22.2727H27.0687Z" fill="#011227"/>
+                        </svg>
+                    </div>
+                    <div class="step">
+                        <svg width="52" height="52" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="26" cy="26" r="24.5" stroke="#011227" stroke-width="3"/>
+                            <circle cx="0" cy="0" r="24.5" fill="#011227" class="svg-bg"/>
+                            <path d="M22.9281 31V29.6705L26.0346 26.794C26.2988 26.5384 26.5204 26.3082 26.6994 26.1037C26.8812 25.8991 27.019 25.6989 27.1127 25.5028C27.2065 25.304 27.2534 25.0895 27.2534 24.8594C27.2534 24.6037 27.1951 24.3835 27.0787 24.1989C26.9622 24.0114 26.8031 23.8679 26.6014 23.7685C26.3997 23.6662 26.171 23.6151 25.9153 23.6151C25.6483 23.6151 25.4153 23.669 25.2164 23.777C25.0176 23.8849 24.8642 24.0398 24.7562 24.2415C24.6483 24.4432 24.5943 24.6832 24.5943 24.9616H22.8429C22.8429 24.3906 22.9721 23.8949 23.2306 23.4744C23.4892 23.054 23.8514 22.7287 24.3173 22.4986C24.7832 22.2685 25.3201 22.1534 25.9281 22.1534C26.5531 22.1534 27.0971 22.2642 27.5602 22.4858C28.0261 22.7045 28.3883 23.0085 28.6468 23.3977C28.9054 23.7869 29.0346 24.233 29.0346 24.7358C29.0346 25.0653 28.9693 25.3906 28.8386 25.7116C28.7108 26.0327 28.4821 26.3892 28.1525 26.7812C27.823 27.1705 27.3585 27.6378 26.7591 28.1832L25.4849 29.4318V29.4915H29.1497V31H22.9281Z" fill="#011227"/>
+                        </svg>
+                    </div>
+                    <div class="step">
+                        <svg width="52" height="52" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="26" cy="26" r="24.5" stroke="#011227" stroke-width="3"/>
+                            <circle cx="0" cy="0" r="24.5" fill="#011227" class="svg-bg"/>
+                            <path d="M25.4782 31.1193C24.8418 31.1193 24.275 31.0099 23.7779 30.7912C23.2836 30.5696 22.8929 30.2656 22.606 29.8793C22.3219 29.4901 22.1756 29.0412 22.1671 28.5327H24.025C24.0364 28.7457 24.106 28.9332 24.2338 29.0952C24.3645 29.2543 24.5378 29.3778 24.7537 29.4659C24.9696 29.554 25.2125 29.598 25.4824 29.598C25.7637 29.598 26.0123 29.5483 26.2282 29.4489C26.4441 29.3494 26.6131 29.2116 26.7353 29.0355C26.8574 28.8594 26.9185 28.6562 26.9185 28.4261C26.9185 28.1932 26.8532 27.9872 26.7225 27.8082C26.5946 27.6264 26.41 27.4844 26.1685 27.3821C25.9299 27.2798 25.6458 27.2287 25.3162 27.2287H24.5023V25.8736H25.3162C25.5946 25.8736 25.8404 25.8253 26.0534 25.7287C26.2694 25.6321 26.437 25.4986 26.5563 25.3281C26.6756 25.1548 26.7353 24.9531 26.7353 24.723C26.7353 24.5043 26.6827 24.3125 26.5776 24.1477C26.4753 23.9801 26.3304 23.8494 26.1429 23.7557C25.9583 23.6619 25.7424 23.6151 25.4952 23.6151C25.2452 23.6151 25.0165 23.6605 24.8091 23.7514C24.6017 23.8395 24.4355 23.9659 24.3105 24.1307C24.1855 24.2955 24.1188 24.4886 24.1103 24.7102H22.3418C22.3503 24.2074 22.4938 23.7642 22.7722 23.3807C23.0506 22.9972 23.4256 22.6974 23.8972 22.4815C24.3716 22.2628 24.9071 22.1534 25.5037 22.1534C26.106 22.1534 26.633 22.2628 27.0847 22.4815C27.5364 22.7003 27.8873 22.9957 28.1373 23.3679C28.3901 23.7372 28.5151 24.152 28.5123 24.6122C28.5151 25.1009 28.3631 25.5085 28.0563 25.8352C27.7523 26.1619 27.356 26.3693 26.8674 26.4574V26.5256C27.5094 26.608 27.998 26.831 28.3333 27.1946C28.6713 27.5554 28.839 28.0071 28.8361 28.5497C28.839 29.0469 28.6955 29.4886 28.4057 29.875C28.1188 30.2614 27.7225 30.5653 27.2168 30.7869C26.7111 31.0085 26.1316 31.1193 25.4782 31.1193Z" fill="#011227"/>
+                        </svg>
+                    </div>
+                    <div class="step">
+                        <svg width="52" height="52" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="26" cy="26" r="24.5" stroke="#011227" stroke-width="3"/>
+                            <circle cx="0" cy="0" r="24.5" fill="#011227" class="svg-bg"/>
+                            <path d="M22.0089 29.4659V28.0128L25.6523 22.2727H26.9052V24.2841H26.1637L23.8668 27.919V27.9872H29.0444V29.4659H22.0089ZM26.1978 31V29.0227L26.2319 28.3793V22.2727H27.962V31H26.1978Z" fill="#011227"/>
+                        </svg>
+                    </div>
+                    <div class="step">
+                        <svg width="52" height="52" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="26" cy="26" r="24.5" stroke="#011227" stroke-width="3"  class="svg-bg"/>
+                            <circle cx="0" cy="0" r="24.5" fill="#011227" class="svg-bg"/>
+                            <path d="M25.5277 31.1193C24.9254 31.1193 24.3885 31.0085 23.9169 30.7869C23.4482 30.5653 23.076 30.2599 22.8004 29.8707C22.5249 29.4815 22.3814 29.0355 22.37 28.5327H24.1598C24.1797 28.8707 24.3217 29.1449 24.5859 29.3551C24.8501 29.5653 25.1641 29.6705 25.5277 29.6705C25.8175 29.6705 26.0732 29.6065 26.2947 29.4787C26.5192 29.348 26.6939 29.1676 26.8189 28.9375C26.9467 28.7045 27.0107 28.4375 27.0107 28.1364C27.0107 27.8295 26.9453 27.5597 26.8146 27.3267C26.6868 27.0937 26.5092 26.9119 26.282 26.7812C26.0547 26.6506 25.7947 26.5838 25.5021 26.581C25.2464 26.581 24.9979 26.6335 24.7564 26.7386C24.5178 26.8437 24.3317 26.9872 24.1982 27.169L22.5575 26.875L22.9709 22.2727H28.3061V23.7812H24.4922L24.2663 25.9673H24.3175C24.4709 25.7514 24.7024 25.5724 25.0121 25.4304C25.3217 25.2884 25.6683 25.2173 26.0518 25.2173C26.5774 25.2173 27.0462 25.3409 27.4581 25.5881C27.87 25.8352 28.1953 26.1747 28.4339 26.6065C28.6726 27.0355 28.7905 27.5298 28.7876 28.0895C28.7905 28.6776 28.6541 29.2003 28.3786 29.6577C28.1058 30.1122 27.7237 30.4702 27.2322 30.7315C26.7436 30.9901 26.1754 31.1193 25.5277 31.1193Z" fill="#011227"/>
+                        </svg>
+                    </div>
                 </div>
             </div>
         </div>
