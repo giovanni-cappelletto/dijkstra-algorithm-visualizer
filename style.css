@@ -9,7 +9,7 @@
 :root {
     --first-side-bg-clr: hsl(0, 12%, 97%); 
     --second-side-bg-clr: hsl(218, 37%, 90%); 
-    --primary-clr: hsl(213, 95%, 8%);
+    --primary-clr: hsl(214, 95%, 8%);
 }
 
 html {
@@ -19,6 +19,7 @@ html {
 body {
     font-family: 'Poppins', sans-serif;
     text-align: justify;
+    hyphens: auto;
     color: var(--primary-clr);
     background-color: var(--first-side-bg-clr);
 }
@@ -30,9 +31,13 @@ body {
 main {
     --space: 30px;
     width: 50vw;
+    background-color: var(--first-side-bg-clr);
 }
 
 .main_title {
+    font-size: clamp(1.5rem, 2vw, 2rem);
+    text-align: left;
+    line-height: 1.25;
     position: relative;
     padding: 20px var(--space);
     margin-block-start: 20px;
@@ -41,7 +46,7 @@ main {
 .main_title::before {
     content: "";
     width: 5px; 
-    height: 50px;
+    height: calc(100% - 25px);
     position: absolute;
     top: 50%;
     left: 0;
@@ -55,6 +60,7 @@ main {
 }
 
 .table-of-contents {
+    text-align: left;
     margin: calc(var(--space) + 15px) var(--space);
 }
 
@@ -83,6 +89,7 @@ a:focus {
 }
 
 .chapter_title {
+    text-align: left;
     position: relative;
     padding-block-end: 10px;
     margin-block-end: 15px;
@@ -127,11 +134,18 @@ a:focus {
 }
 
 .cta:hover,
-.cta:focus {
+.cta:focus-visible {
     opacity: .7;
 }
 
-aside {
+.format {
+    display: block;
+    font-style: italic;
+    text-align: center;
+    margin-block: 5px;
+}
+
+.main-aside {
     display: grid;
     place-items: center;
     position: fixed;
@@ -139,10 +153,26 @@ aside {
     background-color: var(--second-side-bg-clr);
 }
 
+.main-img {
+    max-width: 25rem;
+    width: 80%;
+}
+
+@media screen and (max-width: 610px) {
+    main {
+        width: 100vw;
+        position: relative;
+        z-index: 1;
+        border-block: 1px solid var(--first-side-bg-clr);
+    }
+}
+
 /* Visual explanation */
 section {
     --section-container-margin: 50px;
 
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     position: fixed;
     inset: 0;
     z-index: 1;
@@ -159,20 +189,28 @@ section[data-open="true"] {
     clip-path: circle(200% at 0 0);
 }
 
+.section-container {
+    position: relative;
+    margin-inline: var(--section-container-margin);
+    width: calc(50vw - var(--section-container-margin) * 2);
+}
+
 header {
     display: flex;
     flex-direction: column;
     align-items: start;
-    position: fixed;
-    margin-inline: var(--section-container-margin) 0;
-    width: calc(50vw - var(--section-container-margin));
-    padding-block: 50px 30px;
+    padding-block: 40px 10px;
     background-color: var(--first-side-bg-clr);
     z-index: 1;
 }
 
+header h1 {
+    text-align: left;
+}
+
 .path {
     user-select: none;
+    text-align: left;
 }
 
 .return-to-home {
@@ -186,13 +224,6 @@ header {
 
 .current-position {
     font-style: italic;
-}
-
-.section-container {
-    position: relative;
-    margin-inline: var(--section-container-margin);
-    margin-block: calc(var(--section-container-margin) + 87px) var(--section-container-margin);
-    width: calc(50vw - var(--section-container-margin) * 2);
 }
 
 .section-container p {
@@ -233,8 +264,9 @@ header {
     justify-content: space-between;
     align-items: center;
     position: fixed;
-    bottom: var(--section-container-margin);;
-    width: 450px;
+    z-index: 1;
+    bottom: var(--section-container-margin);
+    width: clamp(350px, 30vw, 450px);
 }
 
 .step {
@@ -250,7 +282,7 @@ header {
     top: 50%;
     left: 50px;
     transform: translateY(-50%);
-    width: 100px;
+    width: 100%;
     height: 4px;
 }
 
@@ -294,13 +326,57 @@ svg path {
     fill: var(--first-side-bg-clr);
 }
 
+section aside {
+    display: grid;
+    place-items: center;
+    position: relative;
+    background-color: var(--second-side-bg-clr);
+}
+
 .visual-explanation-img {
     position: absolute;
     opacity: 0;
-    width: 400px;
+    max-width: 400px;
+    width: 80%;
     transition: opacity .25s linear; 
 }
 
 .visual-explanation-img[data-visible="true"] {
     opacity: 1;
+}
+
+@media screen and (max-width: 900px) {
+    section {
+        grid-template-columns: auto;
+        grid-template-rows: 80vh auto;
+        gap: 2rem;
+    }
+
+    .section-wrapper {
+        order: 2;
+    }
+
+    .section-container {
+        width: calc(100vw - var(--section-container-margin) * 2);
+    }
+
+    .steps {
+        position: relative;
+        margin-block-start: 70px;
+    }
+
+    section aside {
+        order: 1;
+    }
+}
+
+@media screen and (max-width: 450px) {
+    .steps {
+        width: 250px;
+        transform: translateX(-5px);
+    }
+
+    .step {
+        scale: .75;
+    }
 }
