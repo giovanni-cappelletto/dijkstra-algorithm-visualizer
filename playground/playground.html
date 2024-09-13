@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dijkstra's Algorithm Visualizer | Giovanni Cappelletto</title>
+    <link rel="icon" href="../assets/favicon.gif" type="image/gif" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+    />
+    <link rel="stylesheet" href="playground.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.21.1/cytoscape.min.js"></script>
+    <script src="playground.js" type="module"></script>
+  </head>
+  <body data-open="true">
+    <span class="material-symbols-outlined hamburger_icon"> menu </span>
+
+    <section>
+      <div class="section__content">
+        <header>
+          <h1 class="section__title">Settings</h1>
+          <span class="material-symbols-outlined close_icon"> close </span>
+        </header>
+
+        <div class="switch_mode">
+          <p>Mode: <span class="mode">Classic</span></p>
+          <button class="switch_mode__btn btn">Switch Mode</button>
+        </div>
+
+        <form>
+          <div class="input__container">
+            <label for="nodes">Nodes Coordinates</label>
+            <input type="text" id="nodes" disabled />
+          </div>
+
+          <div class="input__container">
+            <label for="edges">Edges</label>
+            <input type="text" id="edges" />
+          </div>
+
+          <button class="btn start_btn">Start</button>
+        </form>
+
+        <div class="note__container">
+          <p class="note">
+            Note:
+            <span class="note__content"
+              >The program will always start by the node A.</span
+            >
+          </p>
+          <p class="note">
+            Note:
+            <span class="note__content"
+              >Do not insert too much nodes. In addition, if you are in
+              Euclidean Mode with several nodes, please specify the edges.</span
+            >
+          </p>
+          <p class="note">
+            Note:
+            <span class="note__content"
+              >Before starting the simulation, check
+              <a href="/index.html#how-to-use">How to use the program</a>.</span
+            >
+          </p>
+        </div>
+      </div>
+    </section>
+    <div id="visualization_container"></div>
+  </body>
+</html>

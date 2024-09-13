@@ -1,7 +1,0 @@
-{
-  "nodes": [
-    { "id": "test", "group": 1 },
-    { "id": "Napoleon", "group": 2 }
-  ],
-  "links": [{ "source": "Napoleon", "target": "test", "value": 1 }]
-}
