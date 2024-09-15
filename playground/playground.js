@@ -32,23 +32,33 @@ const edgeStyles = {
     "curve-style": "bezier",
     "line-style": "dashed",
     "line-dash-pattern": [12],
+    "text-background-color": "#f8f6f6",
+    "text-background-opacity": 1,
+    "text-background-padding": "3px",
+    "text-background-shape": "roundrectangle",
   },
 };
 
 const highlightedStyles = {
-  selector: ".highlighted",
-  style: {
-    color: "#f8f6f6",
-    "background-color": "#001326",
-    "line-color": "#001326",
-    "target-arrow-color": "#001326",
-    "source-arrow-color": "#001326",
-    "target-arrow-shape": "triangle",
-    "line-style": "solid",
-    "transition-property":
-      "color, background-color, line-color, target-arrow-color, source-arrow-color",
-    "transition-duration": "0.5s",
-  },
+  "background-color": "#001326",
+  "line-color": "#001326",
+  "target-arrow-color": "#001326",
+  "source-arrow-color": "#001326",
+  "target-arrow-shape": "triangle",
+  "line-style": "solid",
+  "transition-property":
+    "color, background-color, line-color, target-arrow-color, source-arrow-color",
+  "transition-duration": "0.5s",
+};
+
+const nodeHighlightedStyles = {
+  selector: "node.highlighted",
+  style: { ...highlightedStyles, color: "#f8f6f6" },
+};
+
+const edgeHighlightedStyles = {
+  selector: "edge.highlighted",
+  style: { ...highlightedStyles },
 };
 
 const initGraph = (elements, layoutType, isBackground = false) => {
@@ -57,7 +67,14 @@ const initGraph = (elements, layoutType, isBackground = false) => {
     boxSelectionEnabled: false,
     autounselectify: true,
     elements,
-    style: [nodeStyles, edgeStyles, highlightedStyles],
+    minZoom: 0.5,
+    maxZoom: 2,
+    style: [
+      nodeStyles,
+      edgeStyles,
+      nodeHighlightedStyles,
+      edgeHighlightedStyles,
+    ],
     layout: {
       name: layoutType,
       roots: "#A",
