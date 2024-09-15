@@ -25,7 +25,7 @@ export default class GenerateData {
           id: edge.slice(0, 2),
           source: edge[0],
           target: edge[1],
-          weight: edge[edge.length - 1],
+          weight: edge.slice(3),
         },
       });
     });

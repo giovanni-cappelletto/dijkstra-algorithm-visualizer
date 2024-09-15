@@ -1,4 +1,5 @@
 import GenerateData from "./GenerateData.js";
+import Dijkstra from "./Dijkstra.js";
 
 /* =============== GRAPH =============== */
 let cy = null;
@@ -26,34 +27,96 @@ const edgeStyles = {
     width: 3,
     "line-color": "#B2BBC9",
     "target-arrow-shape": "none",
+    "source-arrow-shape": "none",
     label: "data(weight)",
-    // "source-arrow-shape": "triangle",
     "curve-style": "bezier",
     "line-style": "dashed",
     "line-dash-pattern": [12],
   },
 };
 
-const initGraph = (elements, layoutType) => {
+const highlightedStyles = {
+  selector: ".highlighted",
+  style: {
+    color: "#f8f6f6",
+    "background-color": "#001326",
+    "line-color": "#001326",
+    "target-arrow-color": "#001326",
+    "source-arrow-color": "#001326",
+    "target-arrow-shape": "triangle",
+    "line-style": "solid",
+    "transition-property":
+      "color, background-color, line-color, target-arrow-color, source-arrow-color",
+    "transition-duration": "0.5s",
+  },
+};
+
+const initGraph = (elements, layoutType, isBackground = false) => {
   cy = cytoscape({
     container: document.getElementById("visualization_container"),
+    boxSelectionEnabled: false,
+    autounselectify: true,
     elements,
-    style: [nodeStyles, edgeStyles],
+    style: [nodeStyles, edgeStyles, highlightedStyles],
     layout: {
       name: layoutType,
+      roots: "#A",
+      directed: true,
     },
   });
+
+  if (isBackground) {
+    return;
+  }
+
+  const distances = Object.entries(Dijkstra(cy));
+  const delay = 1500;
+  let i = 0;
+
+  const interval = setInterval(() => {
+    const nodeId = distances[i][0];
+    const edgeId = distances[i][1].edgeId;
+
+    setTimeout(() => {
+      cy.$(`#${nodeId}`).addClass("highlighted");
+    }, 500);
+
+    if (edgeId) {
+      cy.$(`#${edgeId}`).addClass("highlighted");
+    }
+
+    i++;
+
+    if (i === distances.length) {
+      clearInterval(interval);
+    }
+  }, delay);
 };
 
 /* =============== CHANGE MODE =============== */
 const mode = document.querySelector(".mode");
 const switchModeBtn = document.querySelector(".switch_mode__btn");
 const nodesInput = document.querySelector("#nodes");
+const edgesInput = document.querySelector("#edges");
 const modes = ["Classic", "Euclidean"];
+const placeholders = [
+  "AB: 5, CD: 7, AC: 2, BC: 4, BD: 9",
+  ["A(-1, 2) B(4, 1) C(-2, 6) D(3, 1) F(4, 5)", "A-B, B-C, C-D"],
+];
 
 switchModeBtn.addEventListener("click", () => {
   mode.textContent = mode.textContent === modes[0] ? modes[1] : modes[0];
-  nodesInput.disabled = mode.textContent === "Classic" ? true : false;
+
+  if (mode.textContent === "Classic") {
+    nodesInput.disabled = true;
+    edgesInput.placeholder = placeholders[0];
+    nodesInput.placeholder = "";
+    return;
+  }
+
+  nodesInput.placeholder = placeholders[1][0];
+  edgesInput.placeholder = placeholders[1][1];
+  nodesInput.disabled = false;
 });
 
 /* =============== CLOSE SETTINGS =============== */
@@ -89,14 +152,13 @@ document.body.addEventListener("click", ({ target }) => {
 
 /* =============== HANDLING START BUTTON =============== */
 const startBtn = document.querySelector(".start_btn");
-const edgesInput = document.querySelector("#edges");
 
 startBtn.addEventListener("click", (e) => {
   const currentMode = mode.textContent;
   const input = currentMode === "Classic" ? edgesInput.value : nodesInput.value;
   const edges = currentMode === "Euclidean" ? edgesInput.value : "";
   let nodesNumber = 0;
-  let layoutType = "grid";
+  let layoutType = "breadthfirst";
 
   e.preventDefault();
 
@@ -110,10 +172,16 @@ startBtn.addEventListener("click", (e) => {
 
   nodesNumber =
     currentMode === "Euclidean" ? input.split(") ").length : data[1];
-  layoutType = nodesNumber > 4 ? "circle" : "grid";
+  layoutType = nodesNumber > 4 ? "circle" : "breadthfirst";
 
   initGraph(data[0], layoutType);
 });
 
-// AB: 5, CD: 7, AC: 2, BC: 4, BD: 9
-// A(-1, 2) B(4, 1) C(-2, 6) D(3, 1) F(4, 5)
+/* =============== SETTING UP THE BACKGROUND =============== */
+const background = new GenerateData(
+  "Classic",
+  "AB: 4, AC: 8, BC: 11, BD: 8, CE: 7, CF: 1, DE: 2, EF: 6, DG: 7, DH: 4, FH: 2, GH: 14, GI: 9, HI: 10",
+  edges
+);
+
+initGraph(background[0], "breadthfirst", true);
